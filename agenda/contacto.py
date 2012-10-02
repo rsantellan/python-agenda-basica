@@ -19,6 +19,9 @@ class Contacto(object):
         self.mobile = ""
         self.telephone = ""
     
+    def __str__(self):
+        return "%s - %s - %s - %r - %r " % (self.name, self.last_name, self.email, self.mobile, self.telephone)
+        
     def set_name(self, name):
         self.name = name
     
