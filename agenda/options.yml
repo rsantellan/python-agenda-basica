@@ -1,0 +1,6 @@
+#Config
+program:
+    run_as: 'memory'
+databases:
+    sqlite3:
+        name: 'agenda.db'

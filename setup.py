@@ -11,7 +11,7 @@ config = {
     'download_url' : 'https://github.com/rsantellan/python-agenda-basica',
     'author_email' : 'rsantellan@gmail.com',
     'version' : '0.0.1',
-    'install_requieres' : ['nose'],
+    'install_requieres' : ['nose', 'yaml', 'sqlite3'],
     'packages' : ['agenda'],
     'scripts' : [],
     'name' : 'My simple contacts'
