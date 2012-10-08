@@ -1,6 +1,20 @@
 #! /usr/bin/python
 
+from contacto_sqlite import ContactoSqlite
+from options import setup_options
+
 class BasicDb(object):
+    
+    def __init__(self):
+        if setup_options.getDatabaseType() == "sqlite":
+            self.db = ContactoSqlite(setup_options.getSqliteDatabase())
+        else:
+            raise "You must define a database"
+        
+
+    def retrieveDb(self):
+        return self.db
+        
     """ 
     This will be a abstract class implementing the basics of db
     """

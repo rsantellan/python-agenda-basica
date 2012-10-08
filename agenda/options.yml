@@ -1,6 +1,9 @@
 #Config
 program:
-    run_as: 'memory'
+    #Las posibles opciones son: memory, database
+    run_as: 'database'
 databases:
+    type: 'sqlite'
     sqlite3:
         name: 'agenda.db'
+

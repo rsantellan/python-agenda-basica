@@ -3,12 +3,13 @@
 from contacto import Contacto
 from ValidatorException import EmailValidatorException
 from sys import exit
-from options import setup_options
+from basicdb import BasicDb
 
-class AgendaMemory(object):
+class AgendaDatabase(object):
     
     def __init__(self):
-        self.contactos = []
+        self.db = BasicDb()
+        print self.db
         
     def create_contact(self):
         print "========== Create a new contact ================"
@@ -30,10 +31,11 @@ class AgendaMemory(object):
         aux.set_mobile(mobile)
         telephone = raw_input("[Telephone] > ")
         aux.set_telephone(telephone)
-        aux.id = len(self.contactos) + 1
-        self.contactos.append(aux)
-        #return contactos
-        #return aux
+        
+        aux.id = self.db.retrieveDb().insert(aux)
+        
+        
+        
 
     def edit_contact(self, aux):
         print "========== Edit a contact ================"
@@ -61,56 +63,50 @@ class AgendaMemory(object):
             else:
                 salida.append(contact)
         self.contactos = salida
-        #contactos.append(aux)
-        #return contactos
-        #return aux
 
-    def list_contacts(self):
+    def list_contacts(self, limit, page):
         print "========== List all contact ================"
+        quantity_contactos = self.db.retrieveDb().retrieveAllCount();
+        #print quantity_contactos
+        contactos = self.db.retrieveDb().selectAll(limit, page);
         number = 1
         while number != 0:
-            for contact in self.contactos:
+            for contact in contactos:
                 print "{0}: {1}".format(contact.id, contact)
+            
+            if page > 1:
+                print "To go to the previous page press < "
+            
+            if (page * limit) < quantity_contactos:
+                print "To go to the next page press > "
+                
             option = raw_input("Select the number to edit or 0 to come back\n")
             try:
-                number = int(option)
-                element = None
-                #print number
-                #print element
-                for contact in self.contactos:
-                    #print contact.id
-                    if contact.id == number:
-                        #print "estoy aca??"
-                        element = contact
-                #print element
-                if number != 0:
-                    if element == None:
-                        print "Ups there has been an error...."
-                    else:
-                        self.edit_contact(element)
-                    
-                #function = sel_options[selection_int] 
-                #contactos = function(contactos)
+                if option == "<":
+                    self.list_contacts(limit, page - 1)
+                    number = 0
+                elif option == ">":
+                    self.list_contacts(limit, page + 1)
+                    number = 0
+                else:
+                    number = int(option)
+                    element = None
+                    for contact in contactos:
+                        if contact.id == number:
+                            element = contact
+                    if number != 0:
+                        if element == None:
+                            print "Ups there has been an error...."
+                        else:
+                            self.edit_contact(element)
             except ValueError:
                 print "It has to be a number"
-        
-        #return contactos
 
     def close_program(self):
-        print "Thank you for using contact 1.0.0"
+        print "Thank you for using contact 1.0.1"
         exit(0)
 
     def init_agenda(self):
-        #contactos = []
-        pepe = Contacto()
-        pepe.set_name('pepe')
-        pepe.set_last_name('perez')
-        pepe.set_email('pepe@perez.com')
-        pepe.set_mobile('312312')
-        pepe.set_telephone('132312312')
-        pepe.id = len(self.contactos) + 1
-        self.contactos.append(pepe)
-
         main_menu_text = {1 : 'Create new', 2: 'List', 3 : 'Exit'}
         main_menu_options = {1 : self.create_contact, 2: self.list_contacts, 3 : self.close_program}
 
@@ -118,7 +114,7 @@ class AgendaMemory(object):
         start_point = 'main'
 
         selected = start_point
-        print "========== Welcome to contact 1.0.0 ================"
+        print "========== Welcome to contact 1.0.1 ================"
 
         while True:
             print "========== Main menu ================"
@@ -133,8 +129,11 @@ class AgendaMemory(object):
             try:
                 #print selection
                 selection_int = int(selection)
-                function = sel_options[selection_int] 
-                function()
+                function = sel_options[selection_int]
+                if selection == 2 or selection == "2":
+                    function(1 , 2)
+                else:
+                    function()
             except ValueError:
                 print "It has to be a number"
 

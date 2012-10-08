@@ -1,13 +1,20 @@
 #! /usr/bin/python
-import yaml
-configFile = open('options.yml')
-configurationMap = yaml.load(configFile)
-configFile.close()
-print configurationMap
 
-# {'program': {'run_as': 'memory'}}
-start_file = "agenda_{0}".format(configurationMap['program']['run_as'])
+from options import AgendaOptions
+from options import setup_options
+from agenda_memory import AgendaMemory
+from agenda_database import AgendaDatabase
 
-exec ("import " + start_file)
 
+
+print setup_options.moptions
+
+if setup_options.getRunAs() == "memory":
+    agendaMemory = AgendaMemory()
+    agendaMemory.init_agenda()
+elif setup_options.getRunAs() == "database":
+    agendaDatabase = AgendaDatabase()
+    agendaDatabase.init_agenda()
+else:
+    print "There is none run as option available"
 
