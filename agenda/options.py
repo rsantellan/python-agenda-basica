@@ -16,6 +16,21 @@ class AgendaOptions(object):
         
     def getSqliteDatabase(self):
         return self.moptions['databases']['sqlite3']['name']
+        
+    def getLimit(self):
+        return self.moptions['databases']['limit']
+    
+    def getMysqlHost(self):
+        return self.moptions['databases']['mysql']['host']
 
+    def getMysqlUser(self):
+        return self.moptions['databases']['mysql']['user']
+        
+    def getMysqlPass(self):
+        return self.moptions['databases']['mysql']['pass']        
+
+    def getMysqlSchema(self):
+        return self.moptions['databases']['mysql']['schema']
+                
 setup_options = AgendaOptions()
 

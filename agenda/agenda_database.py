@@ -4,6 +4,7 @@ from contacto import Contacto
 from ValidatorException import EmailValidatorException
 from sys import exit
 from basicdb import BasicDb
+from options import setup_options
 
 class AgendaDatabase(object):
     
@@ -37,40 +38,65 @@ class AgendaDatabase(object):
         
         
 
-    def edit_contact(self, aux):
+    def edit_contact(self, identifier):
         print "========== Edit a contact ================"
-        name = raw_input("[Name] > ")
-        aux.set_name(name)
-        last_name = raw_input("[Last Name] > ")
-        aux.set_last_name(last_name)
+        print "========== In case you want to keep the value press ENTER ============ "
+        aux = self.db.retrieveDb().findOne(identifier)
+        if aux == None:
+            print "Ups... None finded"
+            return
+        save_object = False
+        #if test == "":
+        #    print "test matchea a vacio '' "
+
+        name = raw_input("[Name :({0})] > ".format(aux.name))
+        if name != "":
+            aux.set_name(name)
+            save_object = True
+        last_name = raw_input("[Last Name :({0})] > ".format(aux.last_name))
+        if last_name != "":
+            aux.set_last_name(last_name)
+            save_object = True
         has_errors = True
         while has_errors:
             try:
-                email = raw_input("[Email] > ")
-                aux.set_email(email)
+                email = raw_input("[Email :({0})] > ".format(aux.email))
+                if email != "":
+                    aux.set_email(email)
+                    save_object = True
                 has_errors = False
             except EmailValidatorException:
                 print "Invalid email"
         
-        mobile = raw_input("[Mobile] > ")
-        aux.set_mobile(mobile)
-        telephone = raw_input("[Telephone] > ")
-        aux.set_telephone(telephone)
-        salida = []
-        for contact in self.contactos:
-            if contact.id == aux.id:
-                salida.append(aux)
-            else:
-                salida.append(contact)
-        self.contactos = salida
+        mobile = raw_input("[Mobile :({0})] > ".format(aux.mobile))
+        if mobile != "":
+            aux.set_mobile(mobile)
+            save_object = True
+        telephone = raw_input("[Telephone :({0})] > ".format(aux.telephone))
+        if telephone != "":
+            aux.set_telephone(telephone)
+            save_object = True
+        
+        if save_object:
+            self.db.retrieveDb().update(aux)
+
+    def delete_contact(self, itemId):
+        print "========== Deleting contact  ==============="
+        option = raw_input("[Are you sure? (Y/N)] >")
+        if option == "Y":
+            self.db.retrieveDb().delete(itemId)
+            print "The contact has been deleted"
+        else:
+            print "The contact will remain"
 
     def list_contacts(self, limit, page):
         print "========== List all contact ================"
+        print "===========In case you want to delete a contact press d plus the number =========================="
         quantity_contactos = self.db.retrieveDb().retrieveAllCount();
         #print quantity_contactos
-        contactos = self.db.retrieveDb().selectAll(limit, page);
         number = 1
         while number != 0:
+            contactos = self.db.retrieveDb().selectAll(limit, page)
             for contact in contactos:
                 print "{0}: {1}".format(contact.id, contact)
             
@@ -89,16 +115,22 @@ class AgendaDatabase(object):
                     self.list_contacts(limit, page + 1)
                     number = 0
                 else:
-                    number = int(option)
-                    element = None
-                    for contact in contactos:
-                        if contact.id == number:
-                            element = contact
-                    if number != 0:
-                        if element == None:
-                            print "Ups there has been an error...."
+                    if option != "":
+                        list_option = list(option)
+                        if list_option.pop(0) == "d":
+                            option = "".join(list_option)
+                            item_option = int(option)
+                            self.delete_contact(item_option)
+                            #print item_option
+                            #print "".join(list_option)
+                            #return
                         else:
-                            self.edit_contact(element)
+                            number = int(option)
+                            if number != 0:
+                                self.edit_contact(number)
+                    else:
+                        print "Select an option"
+                        
             except ValueError:
                 print "It has to be a number"
 
@@ -131,7 +163,7 @@ class AgendaDatabase(object):
                 selection_int = int(selection)
                 function = sel_options[selection_int]
                 if selection == 2 or selection == "2":
-                    function(1 , 2)
+                    function(setup_options.getLimit() , 1)
                 else:
                     function()
             except ValueError:

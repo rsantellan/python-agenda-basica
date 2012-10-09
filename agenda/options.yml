@@ -3,7 +3,14 @@ program:
     #Las posibles opciones son: memory, database
     run_as: 'database'
 databases:
-    type: 'sqlite'
+    #Los posibles tipos son: sqlite, mysql
+    type: 'mysql'
+    limit: 10
     sqlite3:
         name: 'agenda.db'
+    mysql:
+        host: localhost
+        user: root
+        pass: root
+        schema: python_agenda
 
