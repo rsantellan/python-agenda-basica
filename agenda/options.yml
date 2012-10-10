@@ -1,10 +1,10 @@
 #Config
 program:
-    #Las posibles opciones son: memory, database
-    run_as: 'database'
+    #Las posibles opciones son: memory, database, gtk
+    run_as: 'gtk'
 databases:
     #Los posibles tipos son: sqlite, mysql
-    type: 'mysql'
+    type: 'sqlite'
     limit: 10
     sqlite3:
         name: 'agenda.db'
