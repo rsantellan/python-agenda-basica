@@ -10,7 +10,7 @@ class AgendaDatabase(object):
     
     def __init__(self):
         self.db = BasicDb()
-        print self.db
+        #print self.db
         
     def create_contact(self):
         print "========== Create a new contact ================"

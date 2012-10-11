@@ -142,7 +142,7 @@ class PyAppUndoRedoToolbar(gtk.Window):
         
                 
         
-#PyAppToolbar()
+PyAppToolbar()
 #PyAppDoubleToolbar()
-PyAppUndoRedoToolbar()
+#PyAppUndoRedoToolbar()
 gtk.main()

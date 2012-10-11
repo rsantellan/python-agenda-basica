@@ -185,7 +185,7 @@ class PyAppSubmenu(gtk.Window):
         self.show_all()
         
 #PyAppBasicMenu()
-#PyAppMenuShortcuts()
+PyAppMenuShortcuts()
 #PyAppCheckMenu()
-PyAppSubmenu()
+#PyAppSubmenu()
 gtk.main()
