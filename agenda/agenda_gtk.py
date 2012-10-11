@@ -107,6 +107,9 @@ class AgendaWindow(gtk.Window):
         
         self.create_columns(self.treeView)
         
+        
+        self.enable_next_previous()
+        
         hbox = gtk.HBox(True, 3)
         self.edit = gtk.Button("Edit")
         self.edit.set_size_request(70,30)

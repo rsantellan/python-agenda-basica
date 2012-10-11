@@ -5,7 +5,7 @@ program:
 databases:
     #Los posibles tipos son: sqlite, mysql
     type: 'sqlite'
-    limit: 10
+    limit: 1
     sqlite3:
         name: 'agenda.db'
     mysql:
